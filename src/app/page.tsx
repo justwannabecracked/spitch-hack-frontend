@@ -1,102 +1,144 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState, useRef } from "react";
+import dynamic from "next/dynamic";
+import StatusDisplay from "./components/StatusDisplay";
+import TransactionFeed, { Transaction } from "./components/TransactionFeed";
+import LanguageSelector from "./components/language";
+import AuthForm from "./components/AuthForm";
+import { useAuth } from "./context/AuthContext";
+import { toast } from "react-toastify";
+// The useWavRecorder hook is NO LONGER imported here.
+
+const RecordButton = dynamic(() => import("./components/RecordButton"), {
+  ssr: false, // This is the key to preventing the server-side error
+  loading: () => (
+    <div className="w-48 h-48 rounded-full bg-gray-200 animate-pulse" />
+  ),
+});
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const { user, token, login, isLoading } = useAuth();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+  const [status, setStatus] = useState(
+    "Select your language and hold to record"
+  );
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [language, setLanguage] = useState<"en" | "yo" | "ig" | "ha">("yo");
+  // The page NO LONGER needs to manage the isRecording state.
+  const isAlreadyFetching = useRef(false);
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      if (token) {
+        setStatus("Loading transaction history...");
+        try {
+          const response = await fetch(
+            "https://spitch-hack-backend.onrender.com/api/v1/akawo/transactions",
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+          if (response.ok) {
+            const data = await response.json();
+            setTransactions(data);
+            setStatus("Ready to record.");
+          } else {
+            toast.error("Could not load your transaction history.");
+          }
+        } catch (error) {
+          console.error("Failed to fetch transactions", error);
+        }
+      }
+    };
+    fetchTransactions();
+  }, [token]);
+
+  const handleNewRecording = async (audioBlob: Blob) => {
+    if (isAlreadyFetching.current) return;
+    isAlreadyFetching.current = true;
+    if (!token) {
+      toast.error("You must be logged in.");
+      isAlreadyFetching.current = false;
+      return;
+    }
+
+    setIsProcessing(true);
+    setStatus("Sending to Akawo for processing...");
+
+    const formData = new FormData();
+    formData.append("audio", audioBlob, "transaction.wav");
+    formData.append("language", language);
+
+    try {
+      const response = await fetch(
+        "https://spitch-hack-backend.onrender.com/api/v1/akawo/process-audio",
+        {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        if (result.audioContent) {
+          new Audio(`data:audio/mp3;base64,${result.audioContent}`).play();
+        }
+        throw new Error(result.message || "An error occurred.");
+      }
+
+      setStatus(result.confirmationText);
+      if (result.audioContent) {
+        new Audio(`data:audio/mp3;base64,${result.audioContent}`).play();
+      }
+
+      if (result.type === "transaction_logged" && result.transactions) {
+        setTransactions((prev) => [...result.transactions, ...prev]);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+      setStatus("Sorry, something went wrong.");
+    } finally {
+      isAlreadyFetching.current = false;
+      setIsProcessing(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Loading Akawo...</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <main className="flex items-center justify-center min-h-screen bg-gray-50">
+        <AuthForm onLoginSuccess={login} />
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+    );
+  }
+
+  return (
+    <div className="flex flex-col h-screen font-sans bg-gray-50">
+      <main className="flex-1 flex flex-col items-center w-full p-4 overflow-y-auto">
+        <TransactionFeed transactions={transactions} />
+      </main>
+      <footer className="w-full p-4 bg-white border-t border-gray-200 flex flex-col items-center gap-4">
+        <LanguageSelector
+          selectedLanguage={language}
+          onLanguageChange={setLanguage}
+        />
+        <StatusDisplay message={status} />
+        {/* The button now only needs these two props. */}
+        <RecordButton
+          onRecordStop={handleNewRecording}
+          isProcessing={isProcessing}
+        />
       </footer>
     </div>
   );
