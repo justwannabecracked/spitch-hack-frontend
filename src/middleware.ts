@@ -4,17 +4,18 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("authToken");
   const { pathname } = request.nextUrl;
-  if (token) {
-    if (pathname === "/login" || pathname === "/register") {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
+  const response = NextResponse.next();
+
+  if (pathname === "/login" || pathname === "/register") {
+    response.cookies.delete("authToken");
+    return response;
   }
-  if (!token) {
-    if (pathname.startsWith("/dashboard")) {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
+
+  if (!token && pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
-  return NextResponse.next();
+
+  return response;
 }
 
 export const config = {
