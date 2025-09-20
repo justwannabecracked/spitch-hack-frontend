@@ -14,6 +14,7 @@ export const useWavRecorder = (onStop: (blob: Blob) => void) => {
   const mediaRecorderRef = useRef<IMediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+    const isCancelledRef = useRef(false);
 
   const onStopRef = useRef(onStop);
   useEffect(() => {
@@ -45,44 +46,51 @@ export const useWavRecorder = (onStop: (blob: Blob) => void) => {
     };
   }, []);
 
-  const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true },
-      });
-      streamRef.current = stream;
+const startRecording = async () => {
+  isCancelledRef.current = false;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: true, noiseSuppression: true },
+    });
+    streamRef.current = stream;
+    audioChunksRef.current = [];
 
-      audioChunksRef.current = [];
+    const recorder = new MediaRecorder(stream, { mimeType: "audio/wav" });
+    mediaRecorderRef.current = recorder;
 
-      const recorder = new MediaRecorder(stream, { mimeType: "audio/wav" });
-      mediaRecorderRef.current = recorder;
+    recorder.addEventListener("dataavailable", (event) => {
+      if (event.data.size > 0) {
+        audioChunksRef.current.push(event.data);
+      }
+    });
 
-      recorder.addEventListener("dataavailable", (event) => {
-        if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
-        }
-      });
+    recorder.addEventListener("stop", () => {
+      // Only call onStop if the recording was not cancelled
+      if (!isCancelledRef.current && audioChunksRef.current.length > 0) {
+        const blob = new Blob(audioChunksRef.current, { type: "audio/wav" });
+        onStopRef.current(blob);
+      }
+      stream.getTracks().forEach((track) => track.stop());
+    });
 
-      recorder.addEventListener("stop", () => {
-        if (audioChunksRef.current.length > 0) {
-          const blob = new Blob(audioChunksRef.current, { type: "audio/wav" });
-          console.log("Recording stopped. Blob created with size:", blob.size);
-          onStopRef.current(blob);
-        }
-        stream.getTracks().forEach((track) => track.stop());
-      });
+    recorder.start();
+  } catch (err) {
+    console.error("Error starting recording:", err);
+  }
+};
 
-      recorder.start();
-    } catch (err) {
-      console.error("Error starting recording:", err);
-    }
-  };
+const stopRecording = () => {
+  if (mediaRecorderRef.current?.state === "recording") {
+    mediaRecorderRef.current.stop();
+  }
+};
 
-  const stopRecording = () => {
-    if (mediaRecorderRef.current?.state === "recording") {
-      mediaRecorderRef.current.stop();
-    }
-  };
+const cancelRecording = () => {
+  if (mediaRecorderRef.current?.state === "recording") {
+    isCancelledRef.current = true;
+    mediaRecorderRef.current.stop();
+  }
+};
 
-  return { startRecording, stopRecording };
+  return { startRecording, stopRecording, cancelRecording};
 };

@@ -69,7 +69,7 @@ export default function LandingPage() {
               </Link>
             </div>
             <div className="-mr-2 -my-2 md:hidden">
-              <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+              <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
                 <span className="sr-only">Open menu</span>
                 <MenuIcon className="h-6 w-6" aria-hidden="true" />
               </Popover.Button>
@@ -122,7 +122,7 @@ export default function LandingPage() {
                       </div>
                     </div>
                     <div className="-mr-2">
-                      <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                      <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
                         <span className="sr-only">Close menu</span>
                         <XIcon className="h-6 w-6" aria-hidden="true" />
                       </Popover.Button>
@@ -130,17 +130,17 @@ export default function LandingPage() {
                   </div>
                   <div className="mt-6"></div>
                 </div>
-                <div className="py-6 px-5">
-                  <div className="mt-6">
+                <div className="p-2">
+                  <div className="grid grid-cols-1 gap-4">
                     <Link
                       href="/login"
-                      className="px-6 py-3 text-base rounded-full transition-all duration-300 ease-in-out bg-gray-100 text-gray-700 hover:bg-gray-200 flex items-center gap-2"
+                      className="px-6 py-3 text-base rounded-full transition-all duration-300 ease-in-out bg-gray-100 text-gray-700 hover:bg-gray-200 flex items-center "
                     >
                       Log in
                     </Link>
                     <Link
                       href="/register"
-                      className="px-6 py-3 text-base rounded-full transition-all duration-300 ease-in-out bg-black text-white flex items-center gap-2 hover:bg-gray-800 ml-4"
+                      className="px-6 py-3 text-base rounded-full transition-all duration-300 ease-in-out bg-black text-white flex items-center gap-2 hover:bg-gray-800 "
                     >
                       Get Started
                     </Link>
@@ -181,7 +181,12 @@ export default function LandingPage() {
           <div className="">
             <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
               <img
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain md:hidden"
+                src="/mobile.png"
+                alt="iya-bose"
+              />
+              <img
+                className="hidden md:block w-full h-full object-contain"
                 src="/hero.png"
                 alt="iya-bose"
               />

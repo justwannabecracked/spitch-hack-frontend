@@ -63,7 +63,7 @@ export default function AuthForm({
   };
 
   return (
-    <div className="max-w-md w-full space-y-8">
+    <div className="max-w-7xl px-2 mx-auto space-y-8">
       <div>
         <div className="flex justify-center items-center">
           <Link href="/" className="inline-flex">

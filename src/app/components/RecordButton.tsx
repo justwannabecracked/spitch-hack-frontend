@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useWavRecorder } from "@/app/hooks/useWavRecorder";
 
+
 const MicrophoneIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -17,10 +18,20 @@ const MicrophoneIcon = () => (
     />
   </svg>
 );
+const StopIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-8 w-8"
+    fill="currentColor"
+    viewBox="0 0 16 16"
+  >
+    <path d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z" />
+  </svg>
+);
 const XIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className="h-8 w-8 text-white"
+    className="h-6 w-6"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -33,14 +44,11 @@ const XIcon = () => (
     />
   </svg>
 );
-
 const SoundWave = () => (
   <div className="flex items-center justify-center space-x-1">
     <div className="w-1 h-2 bg-gray-400 rounded-full animate-wave-sm"></div>
     <div className="w-1 h-4 bg-gray-500 rounded-full animate-wave-md"></div>
     <div className="w-1 h-6 bg-gray-600 rounded-full animate-wave-lg"></div>
-    <div className="w-1 h-4 bg-gray-500 rounded-full animate-wave-md"></div>
-    <div className="w-1 h-2 bg-gray-400 rounded-full animate-wave-sm"></div>
   </div>
 );
 
@@ -54,49 +62,57 @@ export default function RecordButton({
   isProcessing,
 }: RecordButtonProps) {
   const [isRecording, setIsRecording] = useState(false);
-  const { startRecording, stopRecording } = useWavRecorder(onRecordStop);
+  const { startRecording, stopRecording, cancelRecording } =
+    useWavRecorder(onRecordStop);
 
-  const [showRecordingUI, setShowRecordingUI] = useState(false);
-
-  const handleInteraction = () => {
-    if (isProcessing) return;
-
-    if (showRecordingUI) {
-      stopRecording();
-      setIsRecording(false);
-      setShowRecordingUI(false);
-    } else {
-      setShowRecordingUI(true);
-      startRecording();
-      setIsRecording(true);
-    }
+  const handleStart = () => {
+    startRecording();
+    setIsRecording(true);
   };
 
-  if (showRecordingUI) {
-    return (
-      <div className="relative w-24 h-24 flex items-center justify-center">
-        <div className="absolute w-20 h-20 bg-gray-200 rounded-full animate-ping"></div>
-        <div className="absolute w-24 h-24 bg-gray-100 rounded-full"></div>
+  const handleStopAndSend = () => {
+    stopRecording();
+    setIsRecording(false);
+  };
 
-        <button
-          onClick={handleInteraction}
-          className="relative w-20 h-20 bg-black text-white rounded-full flex items-center justify-center z-10"
-        >
-          <XIcon />
-        </button>
+  const handleCancel = () => {
+    cancelRecording();
+    setIsRecording(false);
+  };
+
+  if (isProcessing) {
+    return (
+      <div className="w-24 h-24 rounded-full flex items-center justify-center bg-gray-200 text-gray-400 shadow-lg ring-8 ring-gray-200/50">
+        <SoundWave />
       </div>
     );
   }
 
   return (
-    <div>
+    <div className="flex items-center justify-center gap-6">
+      {isRecording && (
+        <button
+          onClick={handleCancel}
+          className="w-16 h-16 rounded-full flex items-center justify-center bg-gray-200 text-gray-600 hover:bg-gray-300 transition-colors"
+          aria-label="Cancel recording"
+        >
+          <XIcon />
+        </button>
+      )}
+
       <button
-        onClick={handleInteraction}
-        disabled={isProcessing}
-        className="w-24 h-24 rounded-full flex items-center justify-center bg-white shadow-lg ring-8 ring-gray-200/50 text-black transform transition-transform active:scale-95 disabled:bg-gray-200 disabled:text-gray-400"
+        onClick={isRecording ? handleStopAndSend : handleStart}
+        className={`w-24 h-24 rounded-full flex items-center justify-center shadow-lg transform transition-all active:scale-95 ring-8 
+          ${
+            isRecording
+              ? "bg-red-500 hover:bg-red-600 text-white ring-red-200/50 animate-pulse"
+              : "bg-white hover:bg-gray-50 text-black ring-gray-200/50"
+          }`}
       >
-        {isProcessing ? <SoundWave /> : <MicrophoneIcon />}
+        {isRecording ? <StopIcon /> : <MicrophoneIcon />}
       </button>
+
+      {isRecording && <div className="w-16 h-16" />}
     </div>
   );
 }

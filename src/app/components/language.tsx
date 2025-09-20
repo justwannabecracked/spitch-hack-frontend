@@ -23,12 +23,12 @@ export default function LanguageSelector({
   onLanguageChange,
 }: LanguageSelectorProps) {
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex items-center justify-center gap-2 flex-wrap">
       {SUPPORTED_LANGUAGES.map((lang) => (
         <button
           key={lang.code}
           onClick={() => onLanguageChange(lang.code)}
-          className={`px-5 py-2 text-sm font-semibold rounded-full transition-all duration-300 ease-in-out flex items-center gap-2
+          className={`px-5 py-2 text-sm font-semibold rounded-xl transition-all duration-300 ease-in-out flex items-center gap-2
             ${
               selectedLanguage === lang.code
                 ? "bg-black text-white"
