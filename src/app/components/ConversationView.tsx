@@ -78,7 +78,7 @@ export default function ConversationView({
       )}
 
       {displayMode === "chat" && (
-        <div className="flex flex-col md:flex-row md:justify-between gap-4 mb-6">
+        <div className="flex justify-between gap-4 mb-3">
           <StatCard
             title="Total Credit"
             amount={summaryData.totalCredit}
