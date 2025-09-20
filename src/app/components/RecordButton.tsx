@@ -6,7 +6,7 @@ import { useWavRecorder } from "@/app/hooks/useWavRecorder";
 const MicrophoneIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className="h-8 w-8 sm:h-10 sm:w-10"
+    className="h-10 w-10"
     viewBox="0 0 20 20"
     fill="currentColor"
   >
@@ -20,7 +20,7 @@ const MicrophoneIcon = () => (
 const StopIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className="h-6 w-6 sm:h-8 sm:w-8"
+    className="h-8 w-8"
     fill="currentColor"
     viewBox="0 0 16 16"
   >
@@ -30,7 +30,7 @@ const StopIcon = () => (
 const XIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5 sm:h-6 sm:w-6"
+    className="h-6 w-6"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -43,7 +43,6 @@ const XIcon = () => (
     />
   </svg>
 );
-// ... (SoundWave is the same)
 const SoundWave = () => (
   <div className="flex items-center justify-center space-x-1">
     <div className="w-1 h-2 bg-gray-400 rounded-full animate-wave-sm"></div>

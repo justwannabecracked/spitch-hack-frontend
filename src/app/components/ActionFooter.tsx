@@ -20,7 +20,7 @@ export default function ActionFooter({
   isProcessing,
 }: ActionFooterProps) {
   return (
-    <footer className="w-full p-4 sm:p-6 bg-white/80 backdrop-blur-sm border-t border-gray-200 flex-shrink-0">
+    <footer className="flex justify-center items-center p-4 bg-white backdrop-blur-sm flex-shrink-0">
       <div className="flex flex-col items-center gap-8 w-full max-w-6xl">
         <div className="w-full bg-white rounded-3xl border-2 border-gray-100 p-6 text-left space-y-4">
           <StatusDisplay message={status} />
@@ -33,7 +33,7 @@ export default function ActionFooter({
           </div>
         </div>
 
-        <div className="mt-8 text-center">
+        <div className="mt-2 text-center">
           <RecordButton
             onRecordStop={onRecordStop}
             isProcessing={isProcessing}
