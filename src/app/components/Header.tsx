@@ -7,14 +7,19 @@ import Image from "next/image";
 export default function Header() {
   const { user } = useAuth();
 
+  const avatarSrc =
+    user?.image ||
+    `https://ui-avatars.com/api/?name=${
+      user?.username || "A"
+    }&background=random&color=fff`;
+
   return (
     <header className="fixed top-0 left-0 right-0 h-20 px-4 sm:px-6 lg:px-8 flex items-center justify-between z-50 bg-white">
+      {/* User Profile */}
       <div className="flex items-center">
         <img
           className="inline-block h-10 w-10 rounded-full"
-          src={`https://ui-avatars.com/api/?name=${
-            user?.username || "Iya Ojo"
-          }&background=random&color=fff`}
+          src={avatarSrc}
           alt="User avatar"
         />
         <p className="hidden sm:block ml-3 text-lg font-semibold text-gray-800">
@@ -22,18 +27,20 @@ export default function Header() {
         </p>
       </div>
 
-      <div className="flex justify-center items-center">
-        <Link href="/" className="inline-flex">
+      <div className="absolute left-1/2 -translate-x-1/2">
+        <Link href="/dashboard" className="flex items-center">
           <Image
-            className="h-12 w-auto"
-            src="/favicon.ico"
-            alt="Akawo Logo"
-            width={48}
-            height={48}
+            className="h-8 w-auto"
+            src="/wr.png"
+            alt="akawọ́ Logo"
+            width={32}
+            height={32}
           />
-          <h1 className="text-3xl font-thin text-gray-900 ml-4">Akawo</h1>
+          <h1 className="text-2xl font-semibold text-gray-900 ml-2">akawọ́</h1>
         </Link>
       </div>
+
+      <div></div>
     </header>
   );
 }

@@ -31,7 +31,7 @@ function DashboardContent() {
   const searchParams = useSearchParams();
 
   const [status, setStatus] = useState(
-    "Mo tà àgbọn ìsú fún ẹgbẹ̀ẹ́dọ́gbọ̀n Naira (₦5,000)."
+    "...for example, I sold 3 bags of rice to John, he paid ₦150,000 and it is remaining ₦20,000"
   );
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -110,7 +110,7 @@ function DashboardContent() {
           router.push(`${pathname}?date=${today}`);
         }
       } else if (result.type === "query_response") {
-        toast.info(result.confirmationText);
+        // toast.info(result.confirmationText);
       }
     } catch (error: any) {
       // toast.error(error.message);
@@ -149,6 +149,32 @@ function DashboardContent() {
     }
   };
 
+  const handleDeleteTransaction = async (transactionId: string) => {
+    if (!window.confirm("Are you sure you want to delete this transaction?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://spitch-hack-backend.onrender.com/api/v1/akawo/transactions/${transactionId}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete transaction.");
+      }
+
+      setTransactions((prev) => prev.filter((tx) => tx._id !== transactionId));
+
+      toast.success("Transaction deleted successfully.");
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
   const filteredTransactions = useMemo(() => {
     let filtered: Transaction[] = [];
 
@@ -182,7 +208,7 @@ function DashboardContent() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p>Loading Akawo...</p>
+        <p>Loading akawọ́...</p>
       </div>
     );
   }
@@ -204,6 +230,7 @@ function DashboardContent() {
               transactions={filteredTransactions}
               pageTitle={pageTitle}
               displayMode={dateParam ? "chat" : "list"}
+              onDeleteTransaction={handleDeleteTransaction}
             />
           ) : (
             <Welcome />

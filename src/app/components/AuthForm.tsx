@@ -48,6 +48,7 @@ export default function AuthForm({
 
       if (isRegister) {
         toast.success("Account created successfully! Please log in.");
+        login(data.accessToken);
         if (onRegisterSuccess) onRegisterSuccess();
       } else {
         toast.success("Login successful!");
@@ -68,12 +69,12 @@ export default function AuthForm({
           <Link href="/" className="inline-flex">
             <Image
               className="h-12 w-auto"
-              src="/favicon.ico"
-              alt="Akawo Logo"
+              src="/wr.png"
+              alt="akawọ́ Logo"
               width={48}
               height={48}
             />
-            <h1 className="text-3xl font-thin text-gray-900 ml-4">Akawo</h1>
+            <h1 className="text-3xl font-thin text-gray-900 ml-4">akawọ́</h1>
           </Link>
         </div>
         <h2 className="my-6 text-center text-3xl font-bold text-gray-900">

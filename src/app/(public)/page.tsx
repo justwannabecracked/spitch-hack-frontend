@@ -8,14 +8,13 @@ import {
   SparklesIcon,
   XIcon,
 } from "@heroicons/react/outline";
-import { ChevronDownIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 
 const footerNavigation = {
   social: [
     {
       name: "Twitter",
-      href: "#",
+      href: "/",
       icon: (props: any) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
@@ -24,7 +23,7 @@ const footerNavigation = {
     },
     {
       name: "Instagram",
-      href: "#",
+      href: "/",
       icon: (props: any) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -37,7 +36,7 @@ const footerNavigation = {
     },
     {
       name: "GitHub",
-      href: "#",
+      href: "/",
       icon: (props: any) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -61,12 +60,12 @@ export default function LandingPage() {
               <Link href="/" className="inline-flex">
                 <Image
                   className="h-12 w-auto"
-                  src="/favicon.ico"
-                  alt="Akawo Logo"
+                  src="/wr.png"
+                  alt="akawọ́ Logo"
                   width={48}
                   height={48}
                 />
-                <h1 className="text-3xl font-thin text-gray-900 ml-4">Akawo</h1>
+                <h1 className="text-3xl font-thin text-gray-900 ml-4">akawọ́</h1>
               </Link>
             </div>
             <div className="-mr-2 -my-2 md:hidden">
@@ -112,13 +111,13 @@ export default function LandingPage() {
                       <div className="flex justify-center items-center">
                         <Image
                           className="h-12 w-auto"
-                          src="/favicon.ico"
-                          alt="Akawo Logo"
+                          src="/wr.png"
+                          alt="akawọ́ Logo"
                           width={48}
                           height={48}
                         />
                         <h1 className="text-4xl font-thin text-gray-900 ml-2">
-                          Akawo
+                          akawọ́
                         </h1>
                       </div>
                     </div>
@@ -154,37 +153,38 @@ export default function LandingPage() {
       </header>
 
       <main>
-        {/* Hero section */}
-        <div className="relative">
-          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-white" />
+        <div className="relative bg-white pb-16 sm:pb-24">
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div className="bg-white py-16 sm:py-24 lg:py-32">
+            <div className="py-16 sm:py-24 lg:py-32">
               <div className="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
                 <p className="mt-2 text-5xl font-bold text-gray-900 sm:text-6xl">
-                  No more guesswork. Know your business inside and out.
+                  Stop Writing, Start Talking. <br /> Know your business inside
+                  and out.
                 </p>
                 <p className="mt-5 max-w-prose mx-auto text-base text-gray-400">
-                  The easiest way to track your business sales.
+                  Manage your daily business records without lifting a pen. Tell
+                  akawọ́ about your sales and debts, and get back to what you do
+                  best.
                 </p>
                 <div className="mt-8 flex justify-center">
                   <Link
                     href="/register"
-                    className="px-6 py-3 text-base rounded-full transition-all duration-300 ease-in-out bg-black text-white flex items-center gap-2 hover:bg-gray-800 ml-4"
+                    className="px-6 py-3 text-base rounded-full transition-all duration-300 ease-in-out bg-black text-white flex items-center gap-2 hover:bg-gray-800"
                   >
                     Get Started
                   </Link>
                 </div>
               </div>
             </div>
-            <div className="relative  sm:overflow-hidden">
-              <div className="absolute inset-0">
-                <img
-                  className="h-full w-full object-cover"
-                  src="/hero.png"
-                  alt="People working on laptops"
-                />
-              </div>
-              <div className="relative my-28 px-4 py-16 sm:px-6 sm:py-24 lg:py-32 lg:px-8"></div>
+          </div>
+
+          <div className="">
+            <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
+              <img
+                className="w-full h-full object-contain"
+                src="/hero.png"
+                alt="iya-bose"
+              />
             </div>
           </div>
         </div>
@@ -294,9 +294,8 @@ export default function LandingPage() {
                   <blockquote>
                     <div>
                       <p className="text-base text-gray-500">
-                        &ldquo; Akawo helps me keep perfect track of simple
-                        sales and keeps perfect records of everything per day
-                        &rdquo;
+                        &ldquo;akawọ́ helps me keep perfect track of simple sales
+                        and keeps perfect records of everything per day &rdquo;
                       </p>
                     </div>
                     <footer className="mt-3">
@@ -304,12 +303,12 @@ export default function LandingPage() {
                         <div className="flex-shrink-0">
                           <img
                             className="h-6 w-6 rounded-full"
-                            src="https://images.unsplash.com/photo-1509783236416-c9ad59bae472?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80"
-                            alt=""
+                            src="https://ik.imagekit.io/ubdvpx7xd0j/Femi_Obadimu/Rectangle%2021_WBA2L3Exq.png?updatedAt=1758370100567"
+                            alt="Iya Bose"
                           />
                         </div>
                         <div className="text-base font-medium text-gray-700">
-                          Iya Abiodun, Trader
+                          Ìyá Bọ̀sẹ́, Lagos Market Trader
                         </div>
                       </div>
                     </footer>
@@ -341,13 +340,13 @@ export default function LandingPage() {
                   </div>
                   <div className="mt-6">
                     <h2 className="text-3xl font-extrabold tracking-tight text-gray-900">
-                      Intelligent Ledger
+                      Instant Financial Clarity
                     </h2>
                     <p className="mt-4 text-lg text-gray-500">
-                      Our intelligent ledger system automatically categorizes
-                      your transactions, making it easier than ever to track
-                      income and expenses. With Akawo, you can focus on growing
-                      your business while we handle the bookkeeping.
+                      Get a clear, real-time picture of your business finances.
+                      Akawo intelligently categorizes every voice entry, so you
+                      can instantly see your profits and track who owes you
+                      money, helping you make smarter decisions.
                     </p>
                     <div className="mt-6"></div>
                   </div>
@@ -374,7 +373,7 @@ export default function LandingPage() {
                 <img
                   className="h-full object-cover"
                   src="/pattern.png"
-                  alt="Akawo pattern"
+                  alt="akawọ́ pattern"
                 />
               </div>
               <div className="relative px-4 py-2 sm:px-6 sm:py-4 lg:py-6 lg:px-8">
@@ -419,7 +418,7 @@ export default function LandingPage() {
               ))}
             </div>
             <p className="mt-8 text-base text-gray-900 md:mt-0 md:order-1">
-              &copy; 2025 Akawo Inc. All rights reserved.
+              &copy; 2025 akawọ́ Inc. All rights reserved.
             </p>
           </div>
         </div>

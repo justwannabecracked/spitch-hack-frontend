@@ -6,7 +6,7 @@ export default function RegisterPage() {
   const router = useRouter();
 
   const handleRegisterSuccess = () => {
-    router.push("/login");
+    router.push("/dashboard");
   };
 
   return (

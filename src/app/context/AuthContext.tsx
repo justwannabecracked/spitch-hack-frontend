@@ -15,6 +15,7 @@ interface User {
   _id: string;
   username: string;
   email: string;
+  image: string;
 }
 
 interface AuthContextType {
@@ -44,7 +45,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser({
           _id: decodedUser.sub,
           username: decodedUser.username,
-          email: "",
+          email: decodedUser.email || "",
+          image: decodedUser.image || "",
         });
         setToken(tokenFromCookie);
       } catch (error) {
@@ -61,7 +63,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser({
         _id: decodedUser.sub,
         username: decodedUser.username,
-        email: "",
+        email: decodedUser.email || "",
+        image: decodedUser.image || "",
       });
       setToken(newToken);
       Cookies.set(AUTH_TOKEN_COOKIE, newToken, { expires: 1, secure: true });

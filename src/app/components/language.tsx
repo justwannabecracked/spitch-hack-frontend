@@ -39,7 +39,7 @@ export default function LanguageSelector({
           {selectedLanguage === lang.code && (
             <Image
               className="h-5 w-auto"
-              src="/wr.png"
+              src="/whitemicrophone.png"
               alt="Recording Waveform"
               width={20}
               height={20}

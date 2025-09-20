@@ -1,8 +1,7 @@
 "use client";
-
-import { useAuth } from "../context/AuthContext";
 import LanguageSelector from "./language";
 import RecordButton from "./RecordButton";
+import { useDynamicGreeting } from "../hooks/useDynamicGreeting";
 
 interface NewLogProps {
   status: string;
@@ -19,15 +18,12 @@ export default function NewLog({
   onRecordStop,
   isProcessing,
 }: NewLogProps) {
-  const { user } = useAuth();
-  const greeting = `Eku Ojumo, ${user?.username || "Iya Ojo"}`;
-  const introText =
-    "Emi ni Akawo, Oluranlowo yin fun isiro owo. E le so fun mi nipa oja te ta ati gbese, tabi ki e beere awon to je yin lowo ati gbogbo owo to wole.";
+  const { greeting, introText } = useDynamicGreeting();
 
   return (
     <div className="h-full w-full flex flex-col items-center justify-center p-6 text-center">
-      <h1 className="text-4xl font-bold text-gray-800">{greeting}</h1>
-      <p className="mt-2 max-w-lg text-gray-600">{introText}</p>
+      <h1 className="text-6xl font-bold text-gray-800">{greeting}</h1>
+      <p className="mt-2 max-w-lg text-lg text-gray-600">{introText}</p>
 
       <div className="mt-8 w-full max-w-2xl bg-white rounded-2xl shadow-lg p-6 space-y-6">
         <div className="w-full min-h-[80px] flex items-center justify-center border border-gray-200 rounded-lg p-4">

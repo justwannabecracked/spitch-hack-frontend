@@ -12,7 +12,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Akawo",
+  title: "akawọ́",
   description: "Your voice-powered accounting assistant",
 };
 
