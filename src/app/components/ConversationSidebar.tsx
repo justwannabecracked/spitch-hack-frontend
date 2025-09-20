@@ -25,8 +25,6 @@ export default function ConversationSidebar({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-
   const currentView = searchParams.get("view");
   const currentDate = searchParams.get("date");
   const action = searchParams.get("action");
@@ -101,29 +99,25 @@ export default function ConversationSidebar({
             {conversationDates.map((item) => (
               <div
                 key={item.name}
-                onMouseEnter={() => setHoveredItem(item.date)}
-                onMouseLeave={() => setHoveredItem(null)}
-                className="flex items-center justify-between rounded-md group"
+                className="flex items-center justify-between rounded-md group hover:bg-gray-50"
               >
                 <button
                   onClick={() => handleNavigate({ date: item.date })}
                   className={classNames(
                     currentDate === item.date
                       ? "bg-gray-100 text-gray-900 font-semibold"
-                      : "text-gray-500 group-hover:bg-gray-50 group-hover:text-gray-900",
+                      : "text-gray-500 group-hover:text-gray-900",
                     "w-full text-left block py-2 px-2 text-sm rounded-md"
                   )}
                 >
                   {item.name}
                 </button>
-                {hoveredItem === item.date && (
-                  <button
-                    onClick={() => onDeleteConversation(item.date)}
-                    className="p-1 text-gray-400 hover:text-red-500 mr-2"
-                  >
-                    <TrashIcon className="h-4 w-4" />
-                  </button>
-                )}
+                <button
+                  onClick={() => onDeleteConversation(item.date)}
+                  className="p-1 text-gray-400 hover:text-red-500 mr-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <TrashIcon className="h-4 w-4" />
+                </button>
               </div>
             ))}
           </nav>

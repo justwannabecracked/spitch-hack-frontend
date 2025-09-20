@@ -113,7 +113,6 @@ function DashboardContent() {
         // toast.info(result.confirmationText);
       }
     } catch (error: any) {
-      // toast.error(error.message);
       setStatus("Sorry, something went wrong.");
     } finally {
       isAlreadyFetching.current = false;
