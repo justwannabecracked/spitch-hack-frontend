@@ -65,7 +65,9 @@ export default function LandingPage() {
                   width={48}
                   height={48}
                 />
-                <h1 className="text-3xl font-thin text-gray-900 ml-4">akawọ́</h1>
+                <h1 className="text-2xl font-semibold text-gray-900 ml-2">
+                  akawọ́
+                </h1>
               </Link>
             </div>
             <div className="-mr-2 -my-2 md:hidden">
@@ -116,7 +118,7 @@ export default function LandingPage() {
                           width={48}
                           height={48}
                         />
-                        <h1 className="text-4xl font-thin text-gray-900 ml-2">
+                        <h1 className="text-2xl font-semibold text-gray-900 ml-2">
                           akawọ́
                         </h1>
                       </div>
@@ -179,7 +181,7 @@ export default function LandingPage() {
           </div>
 
           <div className="">
-            <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-9xl mx-auto ">
               <img
                 className="w-full h-full object-contain md:hidden"
                 src="/mobile.png"

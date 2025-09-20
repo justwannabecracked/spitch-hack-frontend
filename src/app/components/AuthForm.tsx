@@ -74,7 +74,7 @@ export default function AuthForm({
               width={48}
               height={48}
             />
-            <h1 className="text-3xl font-thin text-gray-900 ml-4">akawọ́</h1>
+            <h1 className="text-2xl font-semibold text-gray-900 ml-2">akawọ́</h1>
           </Link>
         </div>
         <h2 className="my-6 text-center text-3xl font-bold text-gray-900">

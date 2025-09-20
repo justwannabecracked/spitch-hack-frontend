@@ -217,12 +217,14 @@ function DashboardContent() {
 
   return (
     <div className="flex h-full">
-      {transactions.length > 0 && (
-        <ConversationSidebar
-          transactions={transactions}
-          onDeleteConversation={handleDeleteConversation}
-        />
-      )}
+      <div className="hidden lg:flex">
+        {transactions.length > 0 && (
+          <ConversationSidebar
+            transactions={transactions}
+            onDeleteConversation={handleDeleteConversation}
+          />
+        )}
+      </div>
       <div className="flex-1 flex flex-col">
         <main className="flex-1 overflow-y-auto">
           {showConversationView ? (
