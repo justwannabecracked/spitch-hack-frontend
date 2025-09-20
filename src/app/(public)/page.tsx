@@ -158,7 +158,7 @@ export default function LandingPage() {
             <div className="py-16 sm:py-24 lg:py-32">
               <div className="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
                 <p className="mt-2 text-5xl font-bold text-gray-900 sm:text-6xl">
-                  Stop Writing, Start Talking. <br /> Know your business inside
+                  Stop Writing, Start Talking. <br /> Track your sales inside
                   and out.
                 </p>
                 <p className="mt-5 max-w-prose mx-auto text-base text-gray-400">
