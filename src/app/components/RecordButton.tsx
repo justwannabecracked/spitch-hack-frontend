@@ -1,7 +1,48 @@
 "use client";
 
 import { useState } from "react";
-import { useWavRecorder } from "../hooks/useWavRecorder";
+import { useWavRecorder } from "@/app/hooks/useWavRecorder";
+
+const MicrophoneIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-10 w-10"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+  >
+    <path
+      fillRule="evenodd"
+      d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8h-1a6 6 0 11-12 0H3a7.001 7.001 0 006 6.93V17H7a1 1 0 100 2h6a1 1 0 100-2h-2v-2.07z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+const XIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-8 w-8 text-white"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M6 18L18 6M6 6l12 12"
+    />
+  </svg>
+);
+
+const SoundWave = () => (
+  <div className="flex items-center justify-center space-x-1">
+    <div className="w-1 h-2 bg-gray-400 rounded-full animate-wave-sm"></div>
+    <div className="w-1 h-4 bg-gray-500 rounded-full animate-wave-md"></div>
+    <div className="w-1 h-6 bg-gray-600 rounded-full animate-wave-lg"></div>
+    <div className="w-1 h-4 bg-gray-500 rounded-full animate-wave-md"></div>
+    <div className="w-1 h-2 bg-gray-400 rounded-full animate-wave-sm"></div>
+  </div>
+);
 
 interface RecordButtonProps {
   onRecordStop: (audioBlob: Blob) => void;
@@ -13,47 +54,49 @@ export default function RecordButton({
   isProcessing,
 }: RecordButtonProps) {
   const [isRecording, setIsRecording] = useState(false);
-
-  // 1. We pass the 'onRecordStop' prop directly to the hook.
-  //    No wrapper function is needed anymore.
   const { startRecording, stopRecording } = useWavRecorder(onRecordStop);
 
-  const handleClick = () => {
+  const [showRecordingUI, setShowRecordingUI] = useState(false);
+
+  const handleInteraction = () => {
     if (isProcessing) return;
 
-    if (isRecording) {
-      // If we are currently recording...
-      // 2. Call stopRecording() to end the audio capture.
+    if (showRecordingUI) {
       stopRecording();
-      // 3. IMPORTANT: Immediately update the UI state.
       setIsRecording(false);
+      setShowRecordingUI(false);
     } else {
-      // If we are not recording...
-      // 4. Call startRecording() to begin audio capture.
+      setShowRecordingUI(true);
       startRecording();
-      // 5. IMPORTANT: Immediately update the UI state.
       setIsRecording(true);
     }
   };
 
-  let buttonText = "Click to Record";
-  let buttonClass = "bg-blue-600 hover:bg-blue-700";
+  if (showRecordingUI) {
+    return (
+      <div className="relative w-24 h-24 flex items-center justify-center">
+        <div className="absolute w-20 h-20 bg-gray-200 rounded-full animate-ping"></div>
+        <div className="absolute w-24 h-24 bg-gray-100 rounded-full"></div>
 
-  if (isProcessing) {
-    buttonText = "Processing...";
-    buttonClass = "bg-gray-400 cursor-not-allowed";
-  } else if (isRecording) {
-    buttonText = "Recording... (Click to Stop)";
-    buttonClass = "bg-red-600 animate-pulse";
+        <button
+          onClick={handleInteraction}
+          className="relative w-20 h-20 bg-black text-white rounded-full flex items-center justify-center z-10"
+        >
+          <XIcon />
+        </button>
+      </div>
+    );
   }
 
   return (
-    <button
-      onClick={handleClick}
-      disabled={isProcessing}
-      className={`w-48 h-48 rounded-full flex items-center justify-center text-center text-white font-bold text-xl shadow-lg transform transition-transform duration-200 ease-in-out active:scale-95 focus:outline-none ${buttonClass}`}
-    >
-      {buttonText}
-    </button>
+    <div>
+      <button
+        onClick={handleInteraction}
+        disabled={isProcessing}
+        className="w-24 h-24 rounded-full flex items-center justify-center bg-white shadow-lg ring-8 ring-gray-200/50 text-black transform transition-transform active:scale-95 disabled:bg-gray-200 disabled:text-gray-400"
+      >
+        {isProcessing ? <SoundWave /> : <MicrophoneIcon />}
+      </button>
+    </div>
   );
 }

@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 interface Language {
   code: "en" | "yo" | "ig" | "ha";
@@ -22,19 +23,28 @@ export default function LanguageSelector({
   onLanguageChange,
 }: LanguageSelectorProps) {
   return (
-    <div className="flex items-center justify-center gap-2 p-2 bg-gray-100 rounded-full shadow-inner">
+    <div className="flex items-center justify-center gap-2">
       {SUPPORTED_LANGUAGES.map((lang) => (
         <button
           key={lang.code}
           onClick={() => onLanguageChange(lang.code)}
-          className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors duration-200 ease-in-out
+          className={`px-5 py-2 text-sm font-semibold rounded-full transition-all duration-300 ease-in-out flex items-center gap-2
             ${
               selectedLanguage === lang.code
-                ? "bg-blue-600 text-white shadow"
-                : "text-gray-600 hover:bg-gray-200"
+                ? "bg-black text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }
           `}
         >
+          {selectedLanguage === lang.code && (
+            <Image
+              className="h-5 w-auto"
+              src="/wr.png"
+              alt="Recording Waveform"
+              width={20}
+              height={20}
+            />
+          )}
           {lang.name}
         </button>
       ))}

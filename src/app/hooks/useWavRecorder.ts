@@ -13,7 +13,6 @@ let encoderRegistered = false;
 export const useWavRecorder = (onStop: (blob: Blob) => void) => {
   const mediaRecorderRef = useRef<IMediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
-  // 1. Create a ref to store the audio chunks as they become available.
   const audioChunksRef = useRef<Blob[]>([]);
 
   const onStopRef = useRef(onStop);
@@ -23,7 +22,6 @@ export const useWavRecorder = (onStop: (blob: Blob) => void) => {
 
   useEffect(() => {
     const registerEncoder = async () => {
-      // ... (This part is unchanged and correct)
       if (encoderRegistered) return;
       try {
         await register(await connect());
@@ -54,13 +52,11 @@ export const useWavRecorder = (onStop: (blob: Blob) => void) => {
       });
       streamRef.current = stream;
 
-      // 2. Clear out any old chunks before starting a new recording.
       audioChunksRef.current = [];
 
       const recorder = new MediaRecorder(stream, { mimeType: "audio/wav" });
       mediaRecorderRef.current = recorder;
 
-      // 3. Add the 'dataavailable' event listener to collect chunks.
       recorder.addEventListener("dataavailable", (event) => {
         if (event.data.size > 0) {
           audioChunksRef.current.push(event.data);
@@ -68,10 +64,9 @@ export const useWavRecorder = (onStop: (blob: Blob) => void) => {
       });
 
       recorder.addEventListener("stop", () => {
-        // 4. Use the chunks we collected to create the final audio blob.
         if (audioChunksRef.current.length > 0) {
           const blob = new Blob(audioChunksRef.current, { type: "audio/wav" });
-          console.log("Recording stopped. Blob created with size:", blob.size); // Helpful for debugging
+          console.log("Recording stopped. Blob created with size:", blob.size);
           onStopRef.current(blob);
         }
         stream.getTracks().forEach((track) => track.stop());
