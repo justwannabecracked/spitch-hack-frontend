@@ -117,7 +117,7 @@ function DashboardContent() {
     }
     isAlreadyFetching.current = true;
     setIsProcessing(true);
-    setStatus("Sending to Akawo for processing...");
+    setStatus("Sending to akawọ́ for processing...");
     const formData = new FormData();
     formData.append("audio", audioBlob, "transaction.wav");
     formData.append("language", language);
