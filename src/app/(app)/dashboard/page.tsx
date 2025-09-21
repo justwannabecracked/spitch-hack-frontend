@@ -30,9 +30,28 @@ function DashboardContent() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [status, setStatus] = useState(
-    "...for example, I sold 3 bags of rice to John, he paid ₦150,000 and it is remaining ₦20,000"
-  );
+  const examplePrompts = [
+    {
+      lang: "en",
+      text: "...for example, I sold 3 bags of rice to John, he paid ₦150,000 and ₦20,000 is remaining.",
+    },
+    {
+      lang: "yo",
+      text: "...fún àpẹẹrẹ, Mo ta ìrẹsì báàgì mẹ́ta fún John, ó san ₦150,000, ó sì ku ₦20,000.",
+    },
+    {
+      lang: "ig",
+      text: "...dịka ọmụmaatụ, M riri akpa osikapa atọ nye John, ọ kwụrụ ₦150,000, fọdụrụ ₦20,000.",
+    },
+    {
+      lang: "ha",
+      text: "...misali, Na sayar da buhunan shinkafa guda uku ga John, ya biya ₦150,000, kuma saura ₦20,000.",
+    },
+  ];
+
+  const [promptIndex, setPromptIndex] = useState(0);
+
+  const [status, setStatus] = useState(examplePrompts[0].text);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [language, setLanguage] = useState<"en" | "yo" | "ig" | "ha">("yo");
@@ -40,6 +59,24 @@ function DashboardContent() {
 
   const view = searchParams.get("view");
   const dateParam = searchParams.get("date");
+
+  useEffect(() => {
+    if (isProcessing) {
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      setPromptIndex((prevIndex) => (prevIndex + 1) % examplePrompts.length);
+    }, 7000);
+
+    return () => clearInterval(intervalId);
+  }, [isProcessing]);
+
+  useEffect(() => {
+    if (!isProcessing) {
+      setStatus(examplePrompts[promptIndex].text);
+    }
+  }, [promptIndex, isProcessing]);
 
   useEffect(() => {
     const fetchTransactions = async () => {
